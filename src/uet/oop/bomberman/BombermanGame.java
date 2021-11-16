@@ -87,5 +87,5 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
     }
-    //manhdep trai
+    //manhdep trai 12345
 }
