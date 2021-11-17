@@ -225,4 +225,8 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
     }
+<<<<<<< HEAD
+=======
+    //manhdep trai 12345
+>>>>>>> origin
 }
