@@ -1,24 +1,46 @@
 package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.MovingEntity.bomber.Bomber;
+import uet.oop.bomberman.entities.MovingEntity.enemy.Balloom;
+import uet.oop.bomberman.entities.MovingEntity.enemy.Doll;
+import uet.oop.bomberman.entities.MovingEntity.enemy.Oneal;
+import uet.oop.bomberman.entities.StillEntity.Bomb;
+import uet.oop.bomberman.entities.StillEntity.Brick;
+import uet.oop.bomberman.entities.StillEntity.Grass;
+import uet.oop.bomberman.entities.StillEntity.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.io.BufferedReader;
+import javafx.scene.input.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class BombermanGame extends Application {
-    
+    private int frame = 1;
+    private long lastTime;
+    public static Stage mainStage = null;
+
+    boolean isRunning;
+    int playerX, playerY;
+    int tileSize = 16, rows = 13, columns = 15;
+    int speed = 4;
+    boolean right, left, up, down;
+    boolean moving;
     public static final int WIDTH = 20;
     public static final int HEIGHT = 15;
     protected int _width = 31, _height = 13; // default values just for testing
@@ -30,6 +52,7 @@ public class BombermanGame extends Application {
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
 
+    Bomb bomb;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -60,12 +83,35 @@ public class BombermanGame extends Application {
                 update();
             }
         };
+        createMap();
+        render();
         timer.start();
 
-        createMap();
-
-        //Entity bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-        //entities.add(bomberman);
+        Entity bomberman = new Bomber(20, 5, Sprite.player_right.getFxImage());
+        entities.add(bomberman);
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.UP) {
+                    bomberman.setY(bomberman.getY() - speed);
+                }
+                if(event.getCode() == KeyCode.RIGHT) {
+                    bomberman.setX(bomberman.getX() + speed);
+                }
+                if(event.getCode() == KeyCode.LEFT) {
+                    bomberman.setX(bomberman.getX() - speed);
+                }
+                if(event.getCode() == KeyCode.DOWN) {
+                    bomberman.setY(bomberman.getY() + speed);
+                }
+                if(event.getCode() == KeyCode.SPACE) {
+                    int x = bomberman.getX() / Sprite.SCALED_SIZE;
+                    int y = bomberman.getY() / Sprite.SCALED_SIZE;
+                    Bomb bomb1 = new Bomb(x, y, Sprite.bomb.getFxImage());
+                    entities.add(bomb1);
+                }
+            }
+        });
     }
 
     public void createMap() {
@@ -94,7 +140,7 @@ public class BombermanGame extends Application {
 
         for (int y = 0; y < _height; y++) {
             for (int x = 0; x < _width; x++) {
-                int pos = x + y * _width;
+                //int pos = x + y * _width;
                 char c = _map[y][x];
                 Entity object;
                 switch (c) {
@@ -145,7 +191,7 @@ public class BombermanGame extends Application {
                         /**_board.addCharacter(new Balloon(Coordinates.tileToPixel(x), Coordinates.tileToPixel(y) + Game.TILES_SIZE, _board));
                          _board.addEntity(x + y * _width, new Grass(x, y, Sprite.grass));*/
                         stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        entities.add(new Balloon(x, y, Sprite.balloom_right1.getFxImage()));
+                        entities.add(new Balloom(x, y, Sprite.balloom_right1.getFxImage()));
                         break;
                     // Thêm oneal
                     case '2':
@@ -174,11 +220,12 @@ public class BombermanGame extends Application {
                         break;
                     // Thêm SpeedItem
                     case 's':
-                        /**layer = new LayeredEntity(x, y,
+                        /** layer = new LayeredEntity(x, y,
                          new Grass(x, y, Sprite.grass),
                          new SpeedItem(x, y, Sprite.powerup_speed),
                          new Brick(x, y, Sprite.brick));
-                         _board.addEntity(pos, layer);*/
+                         _board.addEntity(pos, layer);
+                         */
                         stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
                         entities.add(new Brick(x, y, Sprite.brick.getFxImage()));
                         break;
@@ -188,31 +235,17 @@ public class BombermanGame extends Application {
                          new Grass(x, y, Sprite.grass),
                          new FlameItem(x, y, Sprite.powerup_flames),
                          new Brick(x, y, Sprite.brick));
-                         _board.addEntity(pos, layer);*/
+                         _board.addEntity(pos, layer);
+                         */
                         stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
                         entities.add(new Brick(x, y, Sprite.brick.getFxImage()));
                         break;
-
                     default:
                         stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
                         //_board.addEntity(pos, new Grass(x, y, Sprite.grass));
                         break;
-
                 }
             }
-
-            /** for (int i = 0; i < WIDTH; i++) {
-             for (int j = 0; j < HEIGHT; j++) {
-             Entity object;
-             if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1) {
-             object = new Wall(i, j, Sprite.wall.getFxImage());
-             }
-             else {
-             object = new Grass(i, j, Sprite.grass.getFxImage());
-             }
-             stillObjects.add(object);
-             }
-             }*/
         }
     }
 
@@ -225,8 +258,5 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
     }
-<<<<<<< HEAD
-=======
-    //manhdep trai 12345
->>>>>>> origin
+
 }
