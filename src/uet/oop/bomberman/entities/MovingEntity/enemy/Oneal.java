@@ -12,6 +12,35 @@ public class Oneal extends Enemy {
         super( x, y, img);
     }
 
+    public Oneal() {
+        super();
+    }
+
+    @Override
+    protected void calculateMove() {
+
+    }
+
+    @Override
+    protected void move(int _direction) {
+
+    }
+
+    @Override
+    public void kill() {
+
+    }
+
+    @Override
+    protected void afterKill() {
+
+    }
+
+    @Override
+    public boolean canMove(int _direction) {
+        return false;
+    }
+
     @Override
     public void update() {
 

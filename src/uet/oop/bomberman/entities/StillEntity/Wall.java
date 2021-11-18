@@ -14,6 +14,11 @@ public class Wall extends StillEntity {
         super(x, y, img);
     }
 
+    public Wall() {
+        super();
+    }
+
+
     @Override
     public void update() {
 

@@ -11,6 +11,10 @@ public class SpeedItem extends Item{
         super( x, y, img);
     }
 
+    public SpeedItem() {
+        super();
+    }
+
     @Override
     public void update() {
 

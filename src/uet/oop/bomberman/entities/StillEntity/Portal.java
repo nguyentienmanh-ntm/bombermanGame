@@ -13,6 +13,10 @@ public class Portal extends StillEntity{
         super( x, y, img);
     }
 
+    public Portal() {
+        super();
+    }
+
     @Override
     public void update() {
 

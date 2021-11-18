@@ -12,6 +12,10 @@ public class BombItem extends Item{
         super( x, y, img);
     }
 
+    public BombItem() {
+        super();
+    }
+
     @Override
     public void update() {
 

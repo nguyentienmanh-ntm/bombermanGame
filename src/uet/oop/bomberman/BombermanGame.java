@@ -13,14 +13,13 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
 import uet.oop.bomberman.entities.MovingEntity.bomber.Bomber;
 import uet.oop.bomberman.entities.MovingEntity.enemy.Balloom;
 import uet.oop.bomberman.entities.MovingEntity.enemy.Doll;
+import uet.oop.bomberman.entities.MovingEntity.enemy.Enemy;
 import uet.oop.bomberman.entities.MovingEntity.enemy.Oneal;
-import uet.oop.bomberman.entities.StillEntity.Bomb;
-import uet.oop.bomberman.entities.StillEntity.Brick;
-import uet.oop.bomberman.entities.StillEntity.Grass;
-import uet.oop.bomberman.entities.StillEntity.Wall;
+import uet.oop.bomberman.entities.StillEntity.*;
 import uet.oop.bomberman.graphics.Sprite;
 
 import javafx.scene.input.KeyEvent;
@@ -30,29 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class BombermanGame extends Application {
-    private int frame = 1;
-    private long lastTime;
-    public static Stage mainStage = null;
+import static uet.oop.bomberman.Board.*;
 
-    boolean isRunning;
-    int playerX, playerY;
-    int tileSize = 16, rows = 13, columns = 15;
-    int speed = 4;
-    boolean right, left, up, down;
-    boolean moving;
-    public static final int WIDTH = 20;
-    public static final int HEIGHT = 15;
-    protected int _width = 31, _height = 13; // default values just for testing
-    private static char[][] _map;
-    protected int _level;
-    
+public class BombermanGame extends Application {
+
     private GraphicsContext gc;
     private Canvas canvas;
-    private List<Entity> entities = new ArrayList<>();
-    private List<Entity> stillObjects = new ArrayList<>();
-
-    Bomb bomb;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -61,7 +43,7 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         // Tao Canvas
-        canvas = new Canvas(Sprite.SCALED_SIZE * _width, Sprite.SCALED_SIZE * _height);
+        canvas = new Canvas(Sprite.SCALED_SIZE * Board._width, Sprite.SCALED_SIZE * Board._height);
         gc = canvas.getGraphicsContext2D();
 
         // Tao root container
@@ -80,183 +62,68 @@ public class BombermanGame extends Application {
             @Override
             public void handle(long l) {
                 render();
+                player._moving = false;
                 update();
             }
         };
         createMap();
-        render();
         timer.start();
 
-        Entity bomberman = new Bomber(20, 5, Sprite.player_right.getFxImage());
-        entities.add(bomberman);
+        player = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        bomb = new Bomb(-1, -1, Sprite.bomb.getFxImage());
+
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if(event.getCode() == KeyCode.UP) {
-                    bomberman.setY(bomberman.getY() - speed);
+                    player._moving = true;
+                    if (player.canMove(1)) {
+                        player.setY(player.getY() - speed);
+                    }
                 }
                 if(event.getCode() == KeyCode.RIGHT) {
-                    bomberman.setX(bomberman.getX() + speed);
+                    player._moving = true;
+                    if (player.canMove(2)) {
+                        player.setX(player.getX() + speed);
+                    }
                 }
                 if(event.getCode() == KeyCode.LEFT) {
-                    bomberman.setX(bomberman.getX() - speed);
+                    player._moving = true;
+                    if (player.canMove(0)) {
+                        player.setX(player.getX() - speed);
+                    }
                 }
                 if(event.getCode() == KeyCode.DOWN) {
-                    bomberman.setY(bomberman.getY() + speed);
+                    player._moving = true;
+                    if (player.canMove(3)) {
+                        player.setY(player.getY() + speed);
+                    }
                 }
                 if(event.getCode() == KeyCode.SPACE) {
-                    int x = bomberman.getX() / Sprite.SCALED_SIZE;
-                    int y = bomberman.getY() / Sprite.SCALED_SIZE;
-                    Bomb bomb1 = new Bomb(x, y, Sprite.bomb.getFxImage());
-                    entities.add(bomb1);
+                    player._moving = true;
+                    bomb.setY(player.getY());
+                    bomb.setX(player.getX());
                 }
             }
         });
     }
 
-    public void createMap() {
-        List<String> list = new ArrayList<>();
-        try {
-            FileInputStream fileInputStream = new FileInputStream("D:/bombermanGame/res/levels/Level1update.txt");
-            Scanner scanner = new Scanner(fileInputStream);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                list.add(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        String[] arrays = list.get(0).trim().split(" ");
-        _level = Integer.parseInt(arrays[0]);
-        _height = Integer.parseInt(arrays[1]);
-        _width = Integer.parseInt(arrays[2]);
-        _map = new char[_height][_width];
-        for (int i = 0; i < _height; i++) {
-            for (int j = 0; j < _width; j++) {
-                _map[i][j] = list.get(i + 1).charAt(j);
-            }
-        }
-
-        for (int y = 0; y < _height; y++) {
-            for (int x = 0; x < _width; x++) {
-                //int pos = x + y * _width;
-                char c = _map[y][x];
-                Entity object;
-                switch (c) {
-                    // Thêm grass
-                    case ' ':
-                        object = new Grass(x, y, Sprite.grass.getFxImage());
-                        stillObjects.add(object);
-                        //_board.addEntity(pos, new Grass(x, y, Sprite.grass));
-                        break;
-                    // Thêm Wall
-                    case '#':
-                        object = new Wall(x, y, Sprite.wall.getFxImage());
-                        stillObjects.add(object);
-                        //_board.addEntity(pos, new Wall(x, y, Sprite.wall));
-                        break;
-                    // Thêm Portal
-                    case 'x':
-                        /**_board.addEntity(pos, new LayeredEntity(x, y,
-                         new Grass(x, y, Sprite.grass),
-                         new Portal(x, y, _board, Sprite.portal),
-                         new Brick(x, y, Sprite.brick)));*/
-                        stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        object = new Brick(x, y, Sprite.brick.getFxImage());
-                        entities.add(object);
-                        break;
-                    // Thêm brick
-                    case '*':
-                        /**_board.addEntity(x + y * _width,
-                         new LayeredEntity(x, y,
-                         new Grass(x, y, Sprite.grass),
-                         new Brick(x, y, Sprite.brick)
-                         )
-                         );*/
-                        stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        entities.add(new Brick(x, y, Sprite.brick.getFxImage()));
-                        break;
-                    // Thêm Bomber
-                    case 'p':
-                        /**_board.addCharacter(new Bomber(Coordinates.tileToPixel(x), Coordinates.tileToPixel(y) + Game.TILES_SIZE, _board));
-                         Screen.setOffset(0, 0);
-                         _board.addEntity(x + y * _width, new Grass(x, y, Sprite.grass));*/
-                        stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        entities.add(new Bomber(x, y, Sprite.bomb.getFxImage()));
-                        break;
-
-                    // Thêm balloon
-                    case '1':
-                        /**_board.addCharacter(new Balloon(Coordinates.tileToPixel(x), Coordinates.tileToPixel(y) + Game.TILES_SIZE, _board));
-                         _board.addEntity(x + y * _width, new Grass(x, y, Sprite.grass));*/
-                        stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        entities.add(new Balloom(x, y, Sprite.balloom_right1.getFxImage()));
-                        break;
-                    // Thêm oneal
-                    case '2':
-                        /**_board.addCharacter(new Oneal(Coordinates.tileToPixel(x), Coordinates.tileToPixel(y) + Game.TILES_SIZE, _board));
-                         _board.addEntity(pos, new Grass(x, y, Sprite.grass));*/
-                        stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        entities.add(new Oneal(x, y, Sprite.oneal_right1.getFxImage()));
-                        break;
-                    // Thêm doll
-                    case '3':
-                        /**_board.addCharacter(new Doll(Coordinates.tileToPixel(x), Coordinates.tileToPixel(y) + Game.TILES_SIZE, _board));
-                         _board.addEntity(x + y * _width, new Grass(x, y, Sprite.grass));*/
-                        stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        entities.add(new Doll(x, y, Sprite.doll_right1.getFxImage()));
-                        break;
-                    // Thêm oneal
-                    // Thêm BomItem
-                    case 'b':
-                        /**LayeredEntity layer = new LayeredEntity(x, y,
-                         new Grass(x, y, Sprite.grass),
-                         new BombItem(x, y, Sprite.powerup_bombs),
-                         new Brick(x, y, Sprite.brick));
-                         _board.addEntity(pos, layer);*/
-                        stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        entities.add(new Brick(x, y, Sprite.brick.getFxImage()));
-                        break;
-                    // Thêm SpeedItem
-                    case 's':
-                        /** layer = new LayeredEntity(x, y,
-                         new Grass(x, y, Sprite.grass),
-                         new SpeedItem(x, y, Sprite.powerup_speed),
-                         new Brick(x, y, Sprite.brick));
-                         _board.addEntity(pos, layer);
-                         */
-                        stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        entities.add(new Brick(x, y, Sprite.brick.getFxImage()));
-                        break;
-                    // Thêm FlameItem
-                    case 'f':
-                        /** layer = new LayeredEntity(x, y,
-                         new Grass(x, y, Sprite.grass),
-                         new FlameItem(x, y, Sprite.powerup_flames),
-                         new Brick(x, y, Sprite.brick));
-                         _board.addEntity(pos, layer);
-                         */
-                        stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        entities.add(new Brick(x, y, Sprite.brick.getFxImage()));
-                        break;
-                    default:
-                        stillObjects.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        //_board.addEntity(pos, new Grass(x, y, Sprite.grass));
-                        break;
-                }
-            }
-        }
-    }
-
     public void update() {
-        entities.forEach(Entity::update);
+        enemys.forEach(Entity::update);
+        player.update();
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        stillObjects.forEach(g -> g.render(gc));
-        entities.forEach(g -> g.render(gc));
+        stillEntity.forEach(g -> g.render(gc));
+        gach.forEach(g -> g.render(gc));
+        enemys.forEach(g -> g.render(gc));
+        if (bomb!= null) {
+            bomb.render(gc);
+        }
+        if (player!= null) {
+            player.render(gc);
+        }
     }
 
 }

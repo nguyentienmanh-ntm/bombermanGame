@@ -11,6 +11,10 @@ public class FlameItem extends Item{
         super( x, y, img);
     }
 
+    public FlameItem() {
+        super();
+    }
+
     @Override
     public void update() {
 

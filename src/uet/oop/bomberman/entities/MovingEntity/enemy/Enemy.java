@@ -14,6 +14,10 @@ public abstract class Enemy extends MovingEntity {
         super( x, y, img);
     }
 
+    public Enemy() {
+        super();
+    }
+
     @Override
     public void update() {
 

@@ -14,6 +14,10 @@ public abstract class Item extends StillEntity {
         super( x, y, img);
     }
 
+    public Item() {
+        super();
+    }
+
     @Override
     public void update() {
 

@@ -11,6 +11,10 @@ public class Flame extends StillEntity{
         super( x, y, img);
     }
 
+    public Flame() {
+        super();
+    }
+
     @Override
     public void update() {
 

@@ -17,6 +17,10 @@ public class Brick extends StillEntity {
         super( x, y, img);
     }
 
+    public Brick() {
+        super();
+    }
+
     @Override
     public void update() {
 

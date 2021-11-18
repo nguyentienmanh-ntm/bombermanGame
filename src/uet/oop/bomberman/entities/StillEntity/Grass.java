@@ -13,6 +13,10 @@ public class Grass extends StillEntity {
         super(x, y, img);
     }
 
+    public Grass() {
+        super();
+    }
+
     @Override
     public void update() {
 
