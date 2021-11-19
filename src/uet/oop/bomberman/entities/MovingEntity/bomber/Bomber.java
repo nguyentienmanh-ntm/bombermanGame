@@ -52,46 +52,62 @@ public class Bomber extends MovingEntity {
         _moving = true;
         this._direction = _direction;
         if (_direction == 0) {
-            Entity e = getAt(this.getX() - 4, this.getY());
-            if (e != null) {
-                return (e.getImg().equals(Sprite.brick.getFxImage()) || e.getImg().equals(Sprite.wall.getFxImage()) ||
-                        e.getImg().equals(Sprite.bomb.getFxImage()));
+            Entity e1 = getAt(this.getX() - 4, this.getY());
+            Entity e2 = getAt(this.getX() - 4, this.getY() + 28);
+            if (e1 != null && e2 != null) {
+                return false;
+            } else if (e1 != null) {
+                return (e1.getImg().equals(Sprite.brick.getFxImage()) || e1.getImg().equals(Sprite.wall.getFxImage()) ||
+                        e1.getImg().equals(Sprite.bomb.getFxImage()));
+            } else if (e2 != null) {
+                return (e2.getImg().equals(Sprite.brick.getFxImage()) ||
+                        e2.getImg().equals(Sprite.wall.getFxImage()) || e2.getImg().equals(Sprite.bomb.getFxImage()));
             } else {
-                System.out.println(this.getX() - 4);
-                System.out.println(this.getY());
                 return true;
             }
         }
         if (_direction == 1) {
-            Entity e = getAt(this.getX(), this.getY() - 4);
-            if (e != null) {
-                return (e.getImg().equals(Sprite.brick.getFxImage()) || e.getImg().equals(Sprite.wall.getFxImage()) ||
-                        e.getImg().equals(Sprite.bomb.getFxImage()));
+            Entity e1 = getAt(this.getX(), this.getY() - 4);
+            Entity e2 = getAt(this.getX() + 20, this.getY() - 4);
+            if (e1 != null && e2 != null) {
+                return false;
+            } else if (e1 != null) {
+                return (e1.getImg().equals(Sprite.brick.getFxImage()) || e1.getImg().equals(Sprite.wall.getFxImage()) ||
+                        e1.getImg().equals(Sprite.bomb.getFxImage()));
+            } else if (e2 != null) {
+                return (e2.getImg().equals(Sprite.brick.getFxImage()) ||
+                        e2.getImg().equals(Sprite.wall.getFxImage()) || e2.getImg().equals(Sprite.bomb.getFxImage()));
             } else {
-                System.out.println(this.getX());
-                System.out.println(this.getY() - 4);
                 return true;
             }
         }
         if (_direction == 2) {
-            Entity e = getAt(this.getX() + 20, this.getY());
-            if (e != null) {
-                return (e.getImg().equals(Sprite.brick.getFxImage()) || e.getImg().equals(Sprite.wall.getFxImage()) ||
-                        e.getImg().equals(Sprite.bomb.getFxImage()));
+            Entity e1 = getAt(this.getX() + 20, this.getY());
+            Entity e2 = getAt(this.getX() + 20, this.getY() + 28);
+            if (e1 != null && e2 != null) {
+                return false;
+            } else if (e1 != null) {
+                return (e1.getImg().equals(Sprite.brick.getFxImage()) || e1.getImg().equals(Sprite.wall.getFxImage()) ||
+                        e1.getImg().equals(Sprite.bomb.getFxImage()));
+            } else if (e2 != null) {
+                return (e2.getImg().equals(Sprite.brick.getFxImage()) ||
+                        e2.getImg().equals(Sprite.wall.getFxImage()) || e2.getImg().equals(Sprite.bomb.getFxImage()));
             } else {
-                System.out.println(this.getX() + 4);
-                System.out.println(this.getY());
                 return true;
             }
         }
         if (_direction == 3) {
-            Entity e = getAt(this.getX(), this.getY() + 32);
-            if (e != null) {
-                return (e.getImg().equals(Sprite.brick.getFxImage()) || e.getImg().equals(Sprite.wall.getFxImage()) ||
-                        e.getImg().equals(Sprite.bomb.getFxImage()));
+            Entity e1 = getAt(this.getX(), this.getY() + 32);
+            Entity e2 = getAt(this.getX() + 20, this.getY() + 32);
+            if (e1 != null && e2 != null) {
+                return false;
+            } else if (e1 != null) {
+                return (e1.getImg().equals(Sprite.brick.getFxImage()) || e1.getImg().equals(Sprite.wall.getFxImage()) ||
+                        e1.getImg().equals(Sprite.bomb.getFxImage()));
+            } else if (e2 != null) {
+                return (e2.getImg().equals(Sprite.brick.getFxImage()) ||
+                        e2.getImg().equals(Sprite.wall.getFxImage()) || e2.getImg().equals(Sprite.bomb.getFxImage()));
             } else {
-                System.out.println(this.getX());
-                System.out.println(this.getY() + 4);
                 return true;
             }
         }
@@ -105,12 +121,6 @@ public class Bomber extends MovingEntity {
                 _sprite = Sprite.player_up;
                 if (_moving) {
                     _sprite = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, _animate, 20);
-                }
-                break;
-            case 2:
-                _sprite = Sprite.player_right;
-                if (_moving) {
-                    _sprite = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, _animate, 20);
                 }
                 break;
             case 3:
@@ -136,11 +146,11 @@ public class Bomber extends MovingEntity {
 
     @Override
     public void render(GraphicsContext gc) {
-        //if (_alive)
+        if (_alive)
             chooseSprite();
-        //else
-          //  _sprite = Sprite.player_dead1;
-        gc.drawImage(_sprite.getFxImage(), getX(), getY());
+        else
+            _sprite = Sprite.player_dead1;
+        gc.drawImage(_sprite.getFxImage(), x, y);
     }
 
     @Override
