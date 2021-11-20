@@ -5,7 +5,7 @@ import uet.oop.bomberman.entities.Entity;
 
 public class Doll extends Enemy {
 
-    public Doll(int x, int y, Image img) {
+    public Doll(double x, double y, Image img) {
         super( x, y, img);
     }
 
@@ -19,7 +19,7 @@ public class Doll extends Enemy {
     }
 
     @Override
-    protected void move(int _direction) {
+    public void move(double xa, double ya) {
 
     }
 
@@ -34,7 +34,7 @@ public class Doll extends Enemy {
     }
 
     @Override
-    public boolean canMove(int _direction) {
+    public boolean canMove(double x, double y) {
         return false;
     }
 

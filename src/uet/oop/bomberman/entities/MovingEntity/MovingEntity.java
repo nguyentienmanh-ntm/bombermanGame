@@ -19,7 +19,7 @@ public abstract class MovingEntity extends Entity {
         else _animate = 0;
     }
 
-    public MovingEntity(int x, int y, Image img) {
+    public MovingEntity(double x, double y, Image img) {
         super( x, y, img);
     }
 
@@ -38,7 +38,7 @@ public abstract class MovingEntity extends Entity {
      */
     protected abstract void calculateMove();
 
-    protected abstract void move(int _direction);
+    public abstract void move(double xa, double ya);
 
     /**
      * Được gọi khi đối tượng bị tiêu diệt
@@ -56,7 +56,7 @@ public abstract class MovingEntity extends Entity {
      * @paramy
      * @return
      */
-    public abstract boolean canMove(int _direction);
+    public abstract boolean canMove(double x, double y);
 
     @Override
     public void update() {

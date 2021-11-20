@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 
 public class Oneal extends Enemy {
 
-    public Oneal(int x, int y, Image img) {
+    public Oneal(double x, double y, Image img) {
         super( x, y, img);
     }
 
@@ -22,7 +22,7 @@ public class Oneal extends Enemy {
     }
 
     @Override
-    protected void move(int _direction) {
+    public void move(double xa, double ya) {
 
     }
 
@@ -37,7 +37,7 @@ public class Oneal extends Enemy {
     }
 
     @Override
-    public boolean canMove(int _direction) {
+    public boolean canMove(double x, double y) {
         return false;
     }
 

@@ -23,6 +23,8 @@ import uet.oop.bomberman.entities.StillEntity.*;
 import uet.oop.bomberman.graphics.Sprite;
 
 import javafx.scene.input.KeyEvent;
+import uet.oop.bomberman.input.KeyBoard;
+
 import java.awt.event.KeyListener;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import static uet.oop.bomberman.Board.*;
 
 public class BombermanGame extends Application {
 
+    public static KeyBoard keyBoard = new KeyBoard();
     private GraphicsContext gc;
     private Canvas canvas;
 
@@ -57,12 +60,11 @@ public class BombermanGame extends Application {
         stage.setTitle("Bomberman Game by Quang Anh and Tien Manh");
         stage.setScene(scene);
         stage.show();
-
+        keyBoard.addListener(scene);
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
                 render();
-                player._moving = false;
                 update();
             }
         };
@@ -72,40 +74,6 @@ public class BombermanGame extends Application {
         player = new Bomber(1, 1, Sprite.player_right.getFxImage());
         bomb = new Bomb(-1, -1, Sprite.bomb.getFxImage());
 
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.UP) {
-                    player._moving = true;
-                    if (player.canMove(1)) {
-                        player.setY(player.getY() - speed);
-                    }
-                }
-                if(event.getCode() == KeyCode.RIGHT) {
-                    player._moving = true;
-                    if (player.canMove(2)) {
-                        player.setX(player.getX() + speed);
-                    }
-                }
-                if(event.getCode() == KeyCode.LEFT) {
-                    player._moving = true;
-                    if (player.canMove(0)) {
-                        player.setX(player.getX() - speed);
-                    }
-                }
-                if(event.getCode() == KeyCode.DOWN) {
-                    player._moving = true;
-                    if (player.canMove(3)) {
-                        player.setY(player.getY() + speed);
-                    }
-                }
-                if(event.getCode() == KeyCode.SPACE) {
-                    player._moving = true;
-                    bomb.setY(player.getY());
-                    bomb.setX(player.getX());
-                }
-            }
-        });
     }
 
     public void update() {

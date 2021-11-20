@@ -10,7 +10,7 @@ import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
  */
 
 public abstract class Enemy extends MovingEntity {
-    public Enemy(int x, int y, Image img) {
+    public Enemy(double x, double y, Image img) {
         super( x, y, img);
     }
 

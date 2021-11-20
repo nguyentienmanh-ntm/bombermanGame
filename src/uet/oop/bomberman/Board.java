@@ -168,10 +168,14 @@ public class Board {
 
     }
 
-    public static Entity getAt(int x, int y) {
+    public static Entity getAt(double x, double y) {
         for (Entity element : gach) {
-            if (element.getX() / 32 == x / 32) {
-                if (element.getY() / 32 == y / 32) {
+            int X = (int) element.getX();
+            int Y = (int) element.getY();
+            int _X = (int) x;
+            int _Y = (int) y;
+            if (X / 32 == _X / 32) {
+                if (Y / 32 == _Y / 32) {
                     return element;
                 }
             }

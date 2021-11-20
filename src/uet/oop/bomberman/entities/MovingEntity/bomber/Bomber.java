@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.input.KeyBoard;
+import static uet.oop.bomberman.BombermanGame.keyBoard;
 
 import static uet.oop.bomberman.Board.getAt;
 
@@ -15,7 +17,9 @@ import static uet.oop.bomberman.Board.getAt;
 
 public class Bomber extends MovingEntity {
 
-    public Bomber(int x, int y, Image img) {
+    //public KeyBoard _input;
+
+    public Bomber(double x, double y, Image img) {
         super(x, y, img);
     }
 
@@ -25,12 +29,38 @@ public class Bomber extends MovingEntity {
 
     @Override
     protected void calculateMove() {
+        // TODO: xử lý nhận tín hiệu điều khiển hướng đi từ _input và gọi move() để thực hiện di chuyển
+        // TODO: nhớ cập nhật lại giá trị cờ _moving khi thay đổi trạng thái di chuyển
+        double xa = 0, ya = 0;
+        if(keyBoard.up) ya--;
+        if(keyBoard.down) ya++;
+        if(keyBoard.left) xa--;
+        if(keyBoard.right) xa++;
 
+        if(xa != 0 || ya != 0)  {
+            move(xa * 2.5, ya * 2.5);
+            _moving = true;
+        } else {
+            _moving = false;
+        }
     }
 
     @Override
-    protected void move(int _direction) {
+    public void move(double xa, double ya) {
+        // TODO: sử dụng canMove() để kiểm tra xem có thể di chuyển tới điểm đã tính toán hay không và thực hiện thay đổi tọa độ _x, _y
+        // TODO: nhớ cập nhật giá trị _direction sau khi di chuyển
+        if(xa > 0) _direction = 1;
+        if(xa < 0) _direction = 3;
+        if(ya > 0) _direction = 2;
+        if(ya < 0) _direction = 0;
 
+        if(canMove(0, ya)) { //separate the moves for the player can slide when is colliding
+            setY(getY() + ya);
+        }
+
+        if(canMove(xa, 0)) {
+            setX(getX() + xa);
+        }
     }
 
     @Override
@@ -43,93 +73,43 @@ public class Bomber extends MovingEntity {
 
     }
 
-    // _direction = 0: left;
-    // _direction = 1: up;
-    // _direction = 2: right;
-    // _direction = 3: down;
     @Override
-    public boolean canMove(int _direction) {
-        _moving = true;
-        this._direction = _direction;
-        if (_direction == 0) {
-            Entity e1 = getAt(this.getX() - 4, this.getY());
-            Entity e2 = getAt(this.getX() - 4, this.getY() + 28);
-            if (e1 != null && e2 != null) {
+    public boolean canMove(double x, double y) {
+        // TODO: kiểm tra có đối tượng tại vị trí chuẩn bị di chuyển đến và có thể di chuyển tới đó hay không
+        for (int c = 0; c < 4; c++) { //colision detection for each corner of the player
+            double xt = ((getX() + x) + c % 2 * 9) / 32; //divide with tiles size to pass to tile coordinate
+            double yt = ((getY() + 32 + y) + c / 2 * 10 - 13) / 32; //these values are the best from multiple tests
+
+            Entity a1 = getAt(xt * 32 + 12, yt * 32 - 16);
+            Entity a2 = getAt(xt * 32 + 12, yt * 32);
+            Entity a3 = getAt(xt * 32, yt * 32 - 16);
+            Entity a4 = getAt(xt * 32, yt * 32);
+
+            System.out.println("(" + xt * 32 + ", " + yt * 32 + ") - (" + getX() + ", " + getY() + ")" + ") - (" + x + ", " + y + ")");
+            if(a1 != null || a2 != null || a3 != null || a4 != null) {
                 return false;
-            } else if (e1 != null) {
-                return (e1.getImg().equals(Sprite.brick.getFxImage()) || e1.getImg().equals(Sprite.wall.getFxImage()) ||
-                        e1.getImg().equals(Sprite.bomb.getFxImage()));
-            } else if (e2 != null) {
-                return (e2.getImg().equals(Sprite.brick.getFxImage()) ||
-                        e2.getImg().equals(Sprite.wall.getFxImage()) || e2.getImg().equals(Sprite.bomb.getFxImage()));
-            } else {
-                return true;
             }
         }
-        if (_direction == 1) {
-            Entity e1 = getAt(this.getX(), this.getY() - 4);
-            Entity e2 = getAt(this.getX() + 20, this.getY() - 4);
-            if (e1 != null && e2 != null) {
-                return false;
-            } else if (e1 != null) {
-                return (e1.getImg().equals(Sprite.brick.getFxImage()) || e1.getImg().equals(Sprite.wall.getFxImage()) ||
-                        e1.getImg().equals(Sprite.bomb.getFxImage()));
-            } else if (e2 != null) {
-                return (e2.getImg().equals(Sprite.brick.getFxImage()) ||
-                        e2.getImg().equals(Sprite.wall.getFxImage()) || e2.getImg().equals(Sprite.bomb.getFxImage()));
-            } else {
-                return true;
-            }
-        }
-        if (_direction == 2) {
-            Entity e1 = getAt(this.getX() + 20, this.getY());
-            Entity e2 = getAt(this.getX() + 20, this.getY() + 28);
-            if (e1 != null && e2 != null) {
-                return false;
-            } else if (e1 != null) {
-                return (e1.getImg().equals(Sprite.brick.getFxImage()) || e1.getImg().equals(Sprite.wall.getFxImage()) ||
-                        e1.getImg().equals(Sprite.bomb.getFxImage()));
-            } else if (e2 != null) {
-                return (e2.getImg().equals(Sprite.brick.getFxImage()) ||
-                        e2.getImg().equals(Sprite.wall.getFxImage()) || e2.getImg().equals(Sprite.bomb.getFxImage()));
-            } else {
-                return true;
-            }
-        }
-        if (_direction == 3) {
-            Entity e1 = getAt(this.getX(), this.getY() + 32);
-            Entity e2 = getAt(this.getX() + 20, this.getY() + 32);
-            if (e1 != null && e2 != null) {
-                return false;
-            } else if (e1 != null) {
-                return (e1.getImg().equals(Sprite.brick.getFxImage()) || e1.getImg().equals(Sprite.wall.getFxImage()) ||
-                        e1.getImg().equals(Sprite.bomb.getFxImage()));
-            } else if (e2 != null) {
-                return (e2.getImg().equals(Sprite.brick.getFxImage()) ||
-                        e2.getImg().equals(Sprite.wall.getFxImage()) || e2.getImg().equals(Sprite.bomb.getFxImage()));
-            } else {
-                return true;
-            }
-        }
-        return false;
+        return true;
+        //return false;
     }
 
     //sprite
     private void chooseSprite() {
         switch (_direction) {
-            case 1:
+            case 0:
                 _sprite = Sprite.player_up;
                 if (_moving) {
                     _sprite = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, _animate, 20);
                 }
                 break;
-            case 3:
+            case 2:
                 _sprite = Sprite.player_down;
                 if (_moving) {
                     _sprite = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, _animate, 20);
                 }
                 break;
-            case 0:
+            case 3:
                 _sprite = Sprite.player_left;
                 if (_moving) {
                     _sprite = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, _animate, 20);
@@ -156,5 +136,6 @@ public class Bomber extends MovingEntity {
     @Override
     public void update() {
         animate();
+        calculateMove();
     }
 }

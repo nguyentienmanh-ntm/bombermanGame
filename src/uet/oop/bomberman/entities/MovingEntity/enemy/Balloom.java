@@ -9,8 +9,8 @@ import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
 
 public class Balloom extends Enemy {
 
-    public Balloom(int x, int y, Image img) {
-        super( x, y, img);
+    public Balloom(double x, double y, Image img) {
+        super(x, y, img);
     }
 
     public Balloom() {
@@ -23,7 +23,7 @@ public class Balloom extends Enemy {
     }
 
     @Override
-    protected void move(int _direction) {
+    public void move(double xa, double ya) {
 
     }
 
@@ -38,7 +38,7 @@ public class Balloom extends Enemy {
     }
 
     @Override
-    public boolean canMove(int _direction) {
+    public boolean canMove(double x, double y) {
         return false;
     }
 
