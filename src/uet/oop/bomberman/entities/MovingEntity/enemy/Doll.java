@@ -39,6 +39,11 @@ public class Doll extends Enemy {
     }
 
     @Override
+    protected void chooseSprite() {
+
+    }
+
+    @Override
     public void update() {
 
     }

@@ -106,14 +106,14 @@ public class Board {
                         /**_board.addCharacter(new Balloon(Coordinates.tileToPixel(x), Coordinates.tileToPixel(y) + Game.TILES_SIZE, _board));
                          _board.addEntity(x + y * _width, new Grass(x, y, Sprite.grass));*/
                         stillEntity.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        enemys.add(new Balloom(x, y, Sprite.balloom_right1.getFxImage()));
+                        enemys.add(new Balloom(x, y));
                         break;
                     // Thêm oneal
                     case '2':
                         /**_board.addCharacter(new Oneal(Coordinates.tileToPixel(x), Coordinates.tileToPixel(y) + Game.TILES_SIZE, _board));
                          _board.addEntity(pos, new Grass(x, y, Sprite.grass));*/
                         stillEntity.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        enemys.add(new Oneal(x, y, Sprite.oneal_right1.getFxImage()));
+                        enemys.add(new Oneal(x, y));
                         break;
                     // Thêm doll
                     case '3':
@@ -131,7 +131,7 @@ public class Board {
                          new Brick(x, y, Sprite.brick));
                          _board.addEntity(pos, layer);*/
                         stillEntity.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        enemys.add(new Brick(x, y, Sprite.brick.getFxImage()));
+                        gach.add(new Brick(x, y, Sprite.brick.getFxImage()));
                         break;
                     // Thêm SpeedItem
                     case 's':
@@ -142,7 +142,7 @@ public class Board {
                          _board.addEntity(pos, layer);
                          */
                         stillEntity.add(new Grass(x, y, Sprite.grass.getFxImage()));
-                        enemys.add(new Brick(x, y, Sprite.brick.getFxImage()));
+                        gach.add(new Brick(x, y, Sprite.brick.getFxImage()));
                         break;
                     // Thêm FlameItem
                     case 'f':
@@ -168,8 +168,23 @@ public class Board {
 
     }
 
-    public static Entity getAt(double x, double y) {
+    public static Entity getGachAt(double x, double y) {
         for (Entity element : gach) {
+            int X = (int) element.getX();
+            int Y = (int) element.getY();
+            int _X = (int) x;
+            int _Y = (int) y;
+            if (X / 32 == _X / 32) {
+                if (Y / 32 == _Y / 32) {
+                    return element;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Entity getEnemyAt(double x, double y) {
+        for (Entity element : enemys) {
             int X = (int) element.getX();
             int Y = (int) element.getY();
             int _X = (int) x;

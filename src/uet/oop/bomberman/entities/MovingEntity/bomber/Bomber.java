@@ -8,7 +8,7 @@ import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.input.KeyBoard;
 import static uet.oop.bomberman.BombermanGame.keyBoard;
 
-import static uet.oop.bomberman.Board.getAt;
+import static uet.oop.bomberman.Board.getGachAt;
 
 /**
  * Bomber là nhân vật chính của trò chơi.
@@ -80,13 +80,12 @@ public class Bomber extends MovingEntity {
             double xt = ((getX() + x) + c % 2 * 9) / 32; //divide with tiles size to pass to tile coordinate
             double yt = ((getY() + 32 + y) + c / 2 * 10 - 13) / 32; //these values are the best from multiple tests
 
-            Entity a1 = getAt(xt * 32 + 12, yt * 32 - 16);
-            Entity a2 = getAt(xt * 32 + 12, yt * 32);
-            Entity a3 = getAt(xt * 32, yt * 32 - 16);
-            Entity a4 = getAt(xt * 32, yt * 32);
+            Entity a1 = getGachAt(xt * 32 + 12, yt * 32 - 16);
+            Entity a2 = getGachAt(xt * 32 + 12, yt * 32);
+            Entity a3 = getGachAt(xt * 32, yt * 32 - 16);
+            Entity a4 = getGachAt(xt * 32, yt * 32);
 
-            System.out.println("(" + xt * 32 + ", " + yt * 32 + ") - (" + getX() + ", " + getY() + ")" + ") - (" + x + ", " + y + ")");
-            if(a1 != null || a2 != null || a3 != null || a4 != null) {
+            if (a1 != null || a2 != null || a3 != null || a4 != null) {
                 return false;
             }
         }
