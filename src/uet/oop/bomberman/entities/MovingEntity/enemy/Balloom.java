@@ -21,16 +21,6 @@ public class Balloom extends Enemy {
         super();
     }
 
-    @Override
-    public void kill() {
-
-    }
-
-    @Override
-    protected void afterKill() {
-
-    }
-
     public Balloom(int x, int y) {
         super(x, y, Sprite.balloom_dead, 0.5, 100);
 
@@ -53,14 +43,5 @@ public class Balloom extends Enemy {
                 _sprite = Sprite.movingSprite(Sprite.balloom_left1, Sprite.balloom_left2, Sprite.balloom_left3, _animate, 60);
                 break;
         }
-    }
-
-    @Override
-    public void render(GraphicsContext gc) {
-        if (_alive)
-            chooseSprite();
-        else
-            _sprite = Sprite.player_dead1;
-        gc.drawImage(_sprite.getFxImage(), x, y);
     }
 }

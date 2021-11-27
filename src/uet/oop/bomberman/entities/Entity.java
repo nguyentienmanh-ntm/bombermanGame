@@ -22,6 +22,12 @@ public abstract class Entity {
         this.img = img;
     }
 
+    public Entity (double xUnit, double yUnit, Sprite _sprite) {
+        this.x = xUnit * Sprite.SCALED_SIZE;
+        this.y = yUnit * Sprite.SCALED_SIZE;
+        this._sprite = _sprite;
+    }
+
     public Entity() {
 
     }
@@ -48,6 +54,14 @@ public abstract class Entity {
 
     public void setImg(Image img) {
         this.img = img;
+    }
+
+    public void set_sprite(Sprite _sprite) {
+        this._sprite = _sprite;
+    }
+
+    public Sprite get_sprite() {
+        return _sprite;
     }
 
     public void render(GraphicsContext gc) {

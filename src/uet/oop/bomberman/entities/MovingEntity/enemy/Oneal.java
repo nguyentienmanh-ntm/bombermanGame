@@ -19,18 +19,8 @@ public class Oneal extends Enemy {
         super();
     }
 
-    @Override
-    public void kill() {
-
-    }
-
-    @Override
-    protected void afterKill() {
-
-    }
-
     public Oneal(int x, int y) {
-        super(x, y, Sprite.oneal_dead, 0.8, 100);
+        super(x, y, Sprite.oneal_dead, 1, 100);
 
         _sprite = Sprite.oneal_left1;
 
@@ -51,14 +41,5 @@ public class Oneal extends Enemy {
                 _sprite = Sprite.movingSprite(Sprite.oneal_left1, Sprite.oneal_left2, Sprite.oneal_left3, _animate, 60);
                 break;
         }
-    }
-
-    @Override
-    public void render(GraphicsContext gc) {
-        if (_alive)
-            chooseSprite();
-        else
-            _sprite = Sprite.player_dead1;
-        gc.drawImage(_sprite.getFxImage(), x, y);
     }
 }

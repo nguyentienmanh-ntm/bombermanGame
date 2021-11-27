@@ -20,6 +20,7 @@ import uet.oop.bomberman.entities.MovingEntity.enemy.Doll;
 import uet.oop.bomberman.entities.MovingEntity.enemy.Enemy;
 import uet.oop.bomberman.entities.MovingEntity.enemy.Oneal;
 import uet.oop.bomberman.entities.StillEntity.*;
+import uet.oop.bomberman.entities.StillEntity.item.Item;
 import uet.oop.bomberman.graphics.Sprite;
 
 import javafx.scene.input.KeyEvent;
@@ -72,26 +73,30 @@ public class BombermanGame extends Application {
         timer.start();
 
         player = new Bomber(1, 1, Sprite.player_right.getFxImage());
-        bomb = new Bomb(-1, -1, Sprite.bomb.getFxImage());
+        //bomb = new Bomb(-1, -1, Sprite.bomb.getFxImage());
 
     }
 
     public void update() {
+        updateBrick();
+        updateEnemys();
+        items.forEach(Item::update);
+        updateItems();
+        gach.forEach(Entity::update);
         enemys.forEach(Entity::update);
         player.update();
+        bombs.forEach(Entity::update);
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillEntity.forEach(g -> g.render(gc));
-        gach.forEach(g -> g.render(gc));
+        items.forEach(g -> g.render(gc));
         enemys.forEach(g -> g.render(gc));
-        if (bomb!= null) {
-            bomb.render(gc);
-        }
+        bombs.forEach(g -> g.render(gc));
+        gach.forEach(g -> g.render(gc));
         if (player!= null) {
             player.render(gc);
         }
     }
-
 }

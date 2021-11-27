@@ -10,7 +10,7 @@ import uet.oop.bomberman.entities.Entity;
 
 public class Wall extends StillEntity {
 
-    public Wall(int x, int y, Image img) {
+    public Wall(double x, double y, Image img) {
         super(x, y, img);
     }
 

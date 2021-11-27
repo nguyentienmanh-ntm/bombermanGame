@@ -1,5 +1,6 @@
 package uet.oop.bomberman.entities.MovingEntity.enemy;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
@@ -7,8 +8,7 @@ import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
 import uet.oop.bomberman.entities.MovingEntity.enemy.ai.AI;
 import uet.oop.bomberman.graphics.Sprite;
 
-import static uet.oop.bomberman.Board.getEnemyAt;
-import static uet.oop.bomberman.Board.getGachAt;
+import static uet.oop.bomberman.Board.*;
 
 /**
  * Enemy là các đối tượng mà Bomber phải tiêu diệt hết để có thể qua Level.
@@ -51,16 +51,41 @@ public abstract class Enemy extends MovingEntity {
     }
 
     @Override
+    public void kill() {
+        if(!_alive) return;
+        _alive = false;
+    }
+
+    @Override
+    protected void afterKill() {
+        if(_timeAfter > 0) --_timeAfter;
+        else {
+            if(_finalAnimation > 0) --_finalAnimation;
+            else
+                remove();
+        }
+    }
+
+    @Override
     public void update() {
         animate();
 
-        //if(!_alive) {
-          //  afterKill();
-            //return;
-        //}
+        if(!_alive) {
+            afterKill();
+            return;
+        }
 
         if(_alive)
             calculateMove();
+    }
+
+    @Override
+    public void render(GraphicsContext gc) {
+        if (_alive)
+            chooseSprite();
+        else
+            _sprite = Sprite.movingSprite(Sprite.mob_dead1, Sprite.mob_dead2, Sprite.mob_dead3, _animate, 60);
+        gc.drawImage(_sprite.getFxImage(), x, y);
     }
 
     @Override
@@ -128,8 +153,10 @@ public abstract class Enemy extends MovingEntity {
 
         Entity a1 = getGachAt(xr1, yr1);
         Entity a2 = getGachAt(xr2, yr2);
+        Entity a3 = getBombAt(xr1, yr1);
+        Entity a4 = getBombAt(xr2, yr2);
 
-        return a1 == null && a2 == null;
+        return a1 == null && a2 == null && a3 == null && a4 == null;
     }
 
     protected abstract void chooseSprite();
