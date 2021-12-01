@@ -20,20 +20,7 @@ public class FlameItem extends Item{
     }
 
     @Override
-    public boolean collide(Entity e) {
-        // TODO: xử lý Bomber ăn
-        if (e instanceof Bomber) {
-
-            //Sound.play("Item");
-            addBombRadius(1);
-            remove();
-        }
-        return false;
-    }
-
-    @Override
     public void upLevel() {
         addBombRadius(1);
     }
-
 }

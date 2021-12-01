@@ -3,7 +3,12 @@ package uet.oop.bomberman.entities.StillEntity.bomb;
 import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
+import uet.oop.bomberman.entities.MovingEntity.bomber.Bomber;
+import uet.oop.bomberman.entities.MovingEntity.enemy.Enemy;
 import uet.oop.bomberman.graphics.Sprite;
+
+import static uet.oop.bomberman.Board.enemys;
+import static uet.oop.bomberman.Board.player;
 
 public class FlameSegment extends MovingEntity {
 
@@ -88,14 +93,18 @@ public class FlameSegment extends MovingEntity {
 
     @Override
     public void update() {
-        this.animate();
+        animate();
+        for (Enemy element : enemys) {
+            if(getX() * 32 - 30 < element.getX() && element.getX() < getX() * 32 + 30) {
+                if(getY() * 32 - 30 < element.getY() && element.getY() < getY() * 32 + 30) {
+                    element.kill();
+                }
+            }
+        }
+        if(getX() * 32 - 16 < player.getX() && player.getX() < getX() * 32 + 30) {
+            if(getY() * 32 - 30 < player.getY() && player.getY() < getY() * 32 + 30) {
+                player.kill();
+            }
+        }
     }
-
-    /**@Override
-    public boolean collide(Entity e) {
-        // TODO: xử lý khi FlameSegment va chạm với Character
-        if(e instanceof Bomber) ((Bomber) e).kill();
-        if(e instanceof Enemy) ((Enemy) e).kill();
-        return true;
-    }*/
 }

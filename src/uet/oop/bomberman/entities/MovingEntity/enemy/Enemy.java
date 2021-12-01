@@ -69,14 +69,11 @@ public abstract class Enemy extends MovingEntity {
     @Override
     public void update() {
         animate();
-
         if(!_alive) {
             afterKill();
             return;
         }
-
-        if(_alive)
-            calculateMove();
+        calculateMove();
     }
 
     @Override
@@ -85,7 +82,9 @@ public abstract class Enemy extends MovingEntity {
             chooseSprite();
         else
             _sprite = Sprite.movingSprite(Sprite.mob_dead1, Sprite.mob_dead2, Sprite.mob_dead3, _animate, 60);
-        gc.drawImage(_sprite.getFxImage(), x, y);
+        if (_sprite != null) {
+            gc.drawImage(_sprite.getFxImage(), x, y);
+        }
     }
 
     @Override
@@ -145,7 +144,7 @@ public abstract class Enemy extends MovingEntity {
             //đi xuống
         }
         if(_direction == 3) {
-            xr1 = xr1 - 1;
+            xr1 = xr1 - _speed;
             xr2 = xr1;
             yr2 = yr1 + 32 - _speed;
             //sang trái

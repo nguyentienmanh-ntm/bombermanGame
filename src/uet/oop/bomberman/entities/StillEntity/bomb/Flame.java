@@ -80,15 +80,35 @@ public class Flame extends MovingEntity {
             boolean test1 = false;
             if(_direction == 0) {
                 Y--;
+                if(X * 32 - 24 < player.getX() && player.getX() < X * 32 + 30) {
+                    if(Y * 32 - 26 < player.getY() && player.getY() < Y * 32 + 30) {
+                        player.kill();
+                    }
+                }
             }
             if(_direction == 1) {
                 X++;
+                if(X * 32 - 32 < player.getX() && player.getX() < X * 32 + 30) {
+                    if(Y * 32 - 26 < player.getY() && player.getY() < Y * 32 + 28) {
+                        player.kill();
+                    }
+                }
             }
             if(_direction == 2) {
                 Y++;
+                if(X * 32 - 22 < player.getX() && player.getX() < X * 32 + 30) {
+                    if(Y * 32 - 28 < player.getY() && player.getY() < Y * 32 + 30) {
+                        player.kill();
+                    }
+                }
             }
             if(_direction == 3) {
                 X--;
+                if(X * 32 - 22 < player.getX() && player.getX() < X * 32 + 34) {
+                    if(Y * 32 - 28 < player.getY() && player.getY() < Y * 32 + 28) {
+                        player.kill();
+                    }
+                }
             }
 
             for (StillEntity element : gach) {
@@ -97,13 +117,11 @@ public class Flame extends MovingEntity {
                     break;
                 }
             }
-
-            //if(a instanceof Bomb) ++radius; //explosion has to be below the bom
-
+            
             boolean test = false;
             for (Enemy element : enemys) {
-                if(X * 32 - 32 < element.getX() && element.getX() < X * 32 + 32) {
-                    if(Y * 32 - 32 < element.getY() && element.getY() < Y * 32 + 32) {
+                if(X * 32 - 30 < element.getX() && element.getX() < X * 32 + 30) {
+                    if(Y * 32 - 30 < element.getY() && element.getY() < Y * 32 + 30) {
                         element.kill();
                         test = true;
                     }
@@ -118,6 +136,7 @@ public class Flame extends MovingEntity {
             if (!test) {
                 ++radius;
             } else {
+                ++radius;
                 break;
             }
         }

@@ -8,6 +8,7 @@ import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
 import uet.oop.bomberman.entities.MovingEntity.bomber.Bomber;
 import uet.oop.bomberman.entities.StillEntity.StillEntity;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 /**
  * Bomb là đối tượng mà Bomber sẽ đặt và kích hoạt tại các ô Grass. Khi đã được kích hoạt, Bomber và Enemy không thể di chuyển vào vị trí Bomb.
@@ -18,7 +19,7 @@ import uet.oop.bomberman.graphics.Sprite;
 public class Bomb extends MovingEntity {
 
     protected double _timeToExplode = 120; //2 seconds - thoi gian phat no
-    public int _timeAfter = 60;// thoi gian de no
+    public int _timeAfter = 30;// thoi gian de no
 
     protected Flame[] _flames;
     protected boolean _exploded = false;
@@ -118,7 +119,7 @@ public class Bomb extends MovingEntity {
         for (int i = 0; i < _flames.length; i++) {
             _flames[i] = new Flame((int) (getX() / 32), (int) (getY() / 32), i, Board.getBombRadius());
         }
-        //Sound.play("BOM_11_M");
+        Sound.play("BOM_11_M");
     }
     public void time_explode() {
         _timeToExplode = 0;

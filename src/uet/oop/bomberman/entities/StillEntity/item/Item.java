@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import static uet.oop.bomberman.Board.bombs;
 import static uet.oop.bomberman.Board.player;
 import uet.oop.bomberman.entities.StillEntity.StillEntity;
+import uet.oop.bomberman.sound.Sound;
 
 /**
  * Các Item cũng được giấu phía sau Brick và chỉ hiện ra khi Brick bị phá hủy.
@@ -24,7 +25,8 @@ public abstract class Item extends StillEntity {
     @Override
     public void update() {
         if (getX() - 22 < player.getX() && player.getX() < getX() + 32) {
-            if (getY() - 32 < player.getY() && player.getY() < getY() + 32) {
+            if (getY() - 30 < player.getY() && player.getY() < getY() + 30) {
+                Sound.play("Item");
                 upLevel();
                 remove();
             }

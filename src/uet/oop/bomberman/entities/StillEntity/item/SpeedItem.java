@@ -20,6 +20,6 @@ public class SpeedItem extends Item{
 
     @Override
     public void upLevel() {
-        player._speed = 3.5;
+        player._speed = 3;
     }
 }

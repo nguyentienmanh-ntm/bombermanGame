@@ -19,7 +19,7 @@ public class Brick extends StillEntity {
 
     private int _animate = 0;
     protected boolean _destroyed = false;
-    protected int _timeToDisapear = 60;
+    protected int _timeToDisapear = 30;
     protected boolean _removed = false;
 
     public Brick(double x, double y, Image img) {
@@ -81,7 +81,7 @@ public class Brick extends StillEntity {
 
     private void chooseSprite() {
         if (_destroyed) {
-            setImg(Sprite.movingSprite(Sprite.brick_exploded, Sprite.brick_exploded1, Sprite.brick_exploded2, _animate, 60).getFxImage());
+            setImg(Sprite.movingSprite(Sprite.brick_exploded, Sprite.brick_exploded1, Sprite.brick_exploded2, _animate, 30).getFxImage());
         }
     }
 

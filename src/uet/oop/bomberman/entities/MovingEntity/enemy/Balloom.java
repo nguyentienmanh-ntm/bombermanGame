@@ -21,14 +21,40 @@ public class Balloom extends Enemy {
         super();
     }
 
+    @Override
+    protected void calculateMove() {
+        // TODO: Tính toán hướng đi và di chuyển Enemy theo _ai và cập nhật giá trị cho _direction
+        // TODO: sử dụng canMove() để kiểm tra xem có thể di chuyển tới điểm đã tính toán hay không
+        // TODO: sử dụng move() để di chuyển
+        // TODO: nhớ cập nhật lại giá trị cờ _moving khi thay đổi trạng thái di chuyển
+        int xa = 0, ya = 0;
+        if(_steps <= 0){
+            _direction = _ai.calculateDirection();
+            _steps = MAX_STEPS;
+        }
+
+        if(_direction == 0) ya--;
+        if(_direction == 2) ya++;
+        if(_direction == 3) xa--;
+        if(_direction == 1) xa++;
+
+        if(canMove(xa, ya)) {
+            _steps -= 1 + rest;
+            move(xa * _speed, ya * _speed);
+            _moving = true;
+        } else {
+            _steps = 0;
+            _moving = false;
+        }
+    }
+
     public Balloom(int x, int y) {
-        super(x, y, Sprite.balloom_dead, 0.5, 100);
+        super(x, y, Sprite.balloom_dead, 0.8, 100);
 
         _sprite = Sprite.balloom_left1;
 
         _ai = new AILow();
         _direction = _ai.calculateDirection();
-
     }
 
     @Override
@@ -36,11 +62,19 @@ public class Balloom extends Enemy {
         switch(_direction) {
             case 0:
             case 1:
-                _sprite = Sprite.movingSprite(Sprite.balloom_right1, Sprite.balloom_right2, Sprite.balloom_right3, _animate, 60);
+                if (_moving) {
+                    _sprite = Sprite.movingSprite(Sprite.balloom_right1, Sprite.balloom_right2, Sprite.balloom_right3, _animate, 60);
+                } else {
+                    _sprite = Sprite.balloom_left1;
+                }
                 break;
             case 2:
             case 3:
-                _sprite = Sprite.movingSprite(Sprite.balloom_left1, Sprite.balloom_left2, Sprite.balloom_left3, _animate, 60);
+                if (_moving) {
+                    _sprite = Sprite.movingSprite(Sprite.balloom_left1, Sprite.balloom_left2, Sprite.balloom_left3, _animate, 60);
+                } else {
+                    _sprite = Sprite.balloom_left1;
+                }
                 break;
         }
     }

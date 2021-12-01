@@ -5,14 +5,15 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
+import uet.oop.bomberman.entities.MovingEntity.enemy.Enemy;
 import uet.oop.bomberman.entities.StillEntity.bomb.Bomb;
 import uet.oop.bomberman.graphics.Sprite;
-import uet.oop.bomberman.input.KeyBoard;
+import uet.oop.bomberman.sound.Sound;
 
 import java.util.Iterator;
 
 import static uet.oop.bomberman.Board.*;
-import static uet.oop.bomberman.BombermanGame.keyBoard;
+import static uet.oop.bomberman.BombermanGame.*;
 
 /**
  * Bomber là nhân vật chính của trò chơi.
@@ -21,7 +22,6 @@ import static uet.oop.bomberman.BombermanGame.keyBoard;
 
 public class Bomber extends MovingEntity {
 
-    //public KeyBoard _input;
     protected int _timeBetweenPutBombs = 0;
 
     public Bomber(double x, double y, Image img) {
@@ -70,12 +70,29 @@ public class Bomber extends MovingEntity {
 
     @Override
     public void kill() {
-
+        if (!_alive) return;
+        _alive = false;
+        Sound.play("endgame3");
     }
 
     @Override
     protected void afterKill() {
-
+        if (_timeAfter > 0) --_timeAfter;
+        else {
+            //_board.endGame();
+            //System.out.println("end");
+            if (_timeAfter > -30) {
+                -- _timeAfter;
+                return;
+            }
+            running = false;
+            Image im = new Image("gover (1).png");
+            authorView.setImage(im);
+            authorView.setX(-496);
+            authorView.setY(-208);
+            authorView.setScaleX(0.5);
+            authorView.setScaleY(0.5);
+        }
     }
 
     @Override
@@ -157,11 +174,7 @@ public class Bomber extends MovingEntity {
         // TODO: _timeBetweenPutBombs dùng để ngăn chặn Bomber đặt 2 Bomb cùng tại 1 vị trí trong 1 khoảng thời gian quá ngắn
         // TODO: nếu 3 điều kiện trên thỏa mãn thì thực hiện đặt bom bằng placeBomb()
         // TODO: sau khi đặt, nhớ giảm số lượng Bomb Rate và reset _timeBetweenPutBombs về 0
-        //if(keyBoard.space && Game.getBombRate() > 0 && _timeBetweenPutBombs < 0) {
         if(keyBoard.space && Board.getBombRate() > 0 && _timeBetweenPutBombs < 0) {
-
-                //int xt = Coordinates.pixelToTile(_x + _sprite.getSize() / 2);
-                //int yt = Coordinates.pixelToTile( (_y + _sprite.getSize() / 2) - _sprite.getSize() ); //subtract half player height and minus 1 y position
 
                 double xt = getX() + 8;
                 double yt = getY() + 16;
@@ -174,10 +187,9 @@ public class Bomber extends MovingEntity {
 
     protected void placeBomb(int x, int y) {
         // TODO: thực hiện tạo đối tượng bom, đặt vào vị trí (x, y)
-        /*Bomb b = new Bomb(x, y, _board);*/
         Bomb b = new Bomb(x / 32, y / 32, Sprite.bomb.getFxImage());
         bombs.add(b);
-        //Sound.play("BOM_SET");
+        Sound.play("BOM_SET");
     }
 
     private void clearBombs() {
@@ -197,18 +209,39 @@ public class Bomber extends MovingEntity {
     public void render(GraphicsContext gc) {
         if (_alive)
             chooseSprite();
-        else
-            _sprite = Sprite.player_dead1;
+        else {
+            _sprite = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, _animate, 120);
+        }
         gc.drawImage(_sprite.getFxImage(), x, y);
     }
 
     @Override
     public void update() {
+        collideWithEnemy();
         clearBombs();
         if (_timeBetweenPutBombs < -7500) _timeBetweenPutBombs = 0;
         else _timeBetweenPutBombs--;
         animate();
+
         calculateMove();
         detectPlaceBomb();
+        if (!_alive) {
+            afterKill();
+            return;
+        }
+    }
+
+    protected void collideWithEnemy() {
+        boolean test = false;
+        for (Enemy element : enemys) {
+            if(getX() - 28 < element.getX() && element.getX() < getX() + 30) {
+                if(getY() - 28 < element.getY() && element.getY() < getY() + 30) {
+                    test = true;
+                }
+            }
+        }
+        if (test) {
+            kill();
+        }
     }
 }
