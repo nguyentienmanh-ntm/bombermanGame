@@ -79,14 +79,12 @@ public class Bomber extends MovingEntity {
     protected void afterKill() {
         if (_timeAfter > 0) --_timeAfter;
         else {
-            //_board.endGame();
-            //System.out.println("end");
             if (_timeAfter > -30) {
                 -- _timeAfter;
                 return;
             }
             running = false;
-            Image im = new Image("gover (1).png");
+            Image im = new Image("gameOver.png");
             authorView.setImage(im);
             authorView.setX(-496);
             authorView.setY(-208);
@@ -98,6 +96,9 @@ public class Bomber extends MovingEntity {
     @Override
     public boolean canMove(double x, double y) {
         // TODO: kiểm tra có đối tượng tại vị trí chuẩn bị di chuyển đến và có thể di chuyển tới đó hay không
+        if (!_alive) {
+            return false;
+        }
         for (int c = 0; c < 4; c++) { //colision detection for each corner of the player
             double xt = ((getX() + x) + c % 2 * 9) / 32; //divide with tiles size to pass to tile coordinate
             double yt = ((getY() + 32 + y) + c / 2 * 10 - 13) / 32; //these values are the best from multiple tests
@@ -227,14 +228,13 @@ public class Bomber extends MovingEntity {
         detectPlaceBomb();
         if (!_alive) {
             afterKill();
-            return;
         }
     }
 
     protected void collideWithEnemy() {
         boolean test = false;
         for (Enemy element : enemys) {
-            if(getX() - 28 < element.getX() && element.getX() < getX() + 30) {
+            if(getX() - 26 < element.getX() && element.getX() < getX() + 30) {
                 if(getY() - 28 < element.getY() && element.getY() < getY() + 30) {
                     test = true;
                 }

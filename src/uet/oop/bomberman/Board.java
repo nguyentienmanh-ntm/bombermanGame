@@ -2,7 +2,6 @@ package uet.oop.bomberman;
 
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
-import uet.oop.bomberman.entities.MovingEntity.bomber.Bomber;
 import uet.oop.bomberman.entities.MovingEntity.enemy.Balloom;
 import uet.oop.bomberman.entities.MovingEntity.enemy.Doll;
 import uet.oop.bomberman.entities.MovingEntity.enemy.Enemy;
@@ -32,6 +31,7 @@ public class Board {
     public static List<Bomb> bombs = new ArrayList<>();
     public static List<Item> items = new ArrayList<>();
     public static MovingEntity player;
+    public static Entity portal;
 
     private static final int BOMBRATE = 1;
     private static final int BOMBRADIUS = 1;
@@ -41,6 +41,14 @@ public class Board {
 
     public Board(int level) {
         this.level = level;
+
+        enemys = new ArrayList<>();
+        stillEntity = new ArrayList<>();
+        gach = new ArrayList<>();
+        bombs = new ArrayList<>();
+        items = new ArrayList<>();
+        bombRate = BOMBRATE;
+        bombRadius = BOMBRADIUS;
     }
 
     public static int getBombRate() {
@@ -111,6 +119,7 @@ public class Board {
                     // Thêm Portal
                     case 'x':
                         stillEntity.add(new Grass(x, y, Sprite.grass.getFxImage()));
+                        portal = new Portal(x, y, Sprite.portal.getFxImage());
                         gach.add(new Brick(x, y));
                         break;
                     // Thêm brick

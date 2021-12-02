@@ -1,6 +1,11 @@
 package uet.oop.bomberman.entities.StillEntity;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.sound.Sound;
+
+import static uet.oop.bomberman.Board.enemys;
+import static uet.oop.bomberman.Board.player;
+import static uet.oop.bomberman.BombermanGame.upLevel;
 
 /**
  * Portal là đối tượng được giấu phía sau một đối tượng Brick.
@@ -19,6 +24,14 @@ public class Portal extends StillEntity{
 
     @Override
     public void update() {
-
+        if (enemys.size() > 0) {
+            return;
+        }
+        if (getX() - 8 < player.getX() && player.getX() < getX() + 16) {
+            if (getY() - 16 < player.getY() && player.getY() < getY() + 16) {
+                upLevel = true;
+                Sound.play("CRYST_UP");
+            }
+        }
     }
 }

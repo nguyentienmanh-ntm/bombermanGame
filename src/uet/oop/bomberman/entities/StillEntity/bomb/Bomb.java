@@ -6,7 +6,6 @@ import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
 import uet.oop.bomberman.entities.MovingEntity.bomber.Bomber;
-import uet.oop.bomberman.entities.StillEntity.StillEntity;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.sound.Sound;
 
@@ -110,10 +109,6 @@ public class Bomb extends MovingEntity {
         _exploded = true;
         _allowedToPassThru = true;
         // TODO: xử lý khi Character đứng tại vị trí Bomb
-        /**Character x = _board.getCharacterAtExcluding((int)_x, (int)_y, null);*/
-        //if(x != null){
-          //  x.kill();
-        //}
         // TODO: tạo các Flame
         _flames = new Flame[4];
         for (int i = 0; i < _flames.length; i++) {
@@ -128,16 +123,16 @@ public class Bomb extends MovingEntity {
     public FlameSegment flameAt(double x, double y) {
         if(!_exploded) return null;
 
-        for (int i = 0; i < _flames.length; i++) {
-            if(_flames[i] == null) return null;
-            FlameSegment e = _flames[i].flameSegmentAt(x, y);
-            if(e != null) return e;
+        for (Flame flame : _flames) {
+            if (flame == null) return null;
+            FlameSegment e = flame.flameSegmentAt(x, y);
+            if (e != null) return e;
         }
 
         return null;
     }
 
-    public boolean collide(Entity e) {
+    /**public boolean collide(Entity e) {
         // TODO: xử lý khi Bomber đi ra sau khi vừa đặt bom (_allowedToPassThru)
 
         if(e instanceof Bomber) {
@@ -156,5 +151,5 @@ public class Bomb extends MovingEntity {
             return true;
         }
         return false;
-    }
+    }*/
 }

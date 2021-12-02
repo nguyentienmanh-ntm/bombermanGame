@@ -7,6 +7,7 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
 import uet.oop.bomberman.entities.MovingEntity.enemy.ai.AI;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 import static uet.oop.bomberman.Board.*;
 
@@ -54,6 +55,7 @@ public abstract class Enemy extends MovingEntity {
     public void kill() {
         if(!_alive) return;
         _alive = false;
+        Sound.play("AA126_11");
     }
 
     @Override

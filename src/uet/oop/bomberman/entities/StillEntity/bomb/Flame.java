@@ -1,7 +1,6 @@
 package uet.oop.bomberman.entities.StillEntity.bomb;
 
 import javafx.scene.canvas.GraphicsContext;
-import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
 import uet.oop.bomberman.entities.MovingEntity.bomber.Bomber;
@@ -12,7 +11,6 @@ import static uet.oop.bomberman.Board.*;
 
 public class Flame extends MovingEntity {
 
-    //protected Board _board;
     protected int _direction;
     private int _radius;
     protected int xOrigin, yOrigin;
@@ -32,7 +30,6 @@ public class Flame extends MovingEntity {
         setY(y);
         _direction = direction;
         _radius = radius;
-        //_board = board;
         createFlameSegments();
     }
 
@@ -190,7 +187,7 @@ public class Flame extends MovingEntity {
         }
     }
 
-    public boolean collide(Entity e) {
+    /**public boolean collide(Entity e) {
         // TODO: xử lý va chạm với Bomber, Enemy. Chú ý đối tượng này có vị trí chính là vị trí của Bomb đã nổ
         if(e instanceof Bomber) {
             ((Bomber) e).kill();
@@ -199,5 +196,5 @@ public class Flame extends MovingEntity {
             ((Enemy) e).kill();
         }
         return true;
-    }
+    }*/
 }

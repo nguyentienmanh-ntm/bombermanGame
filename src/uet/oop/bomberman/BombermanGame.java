@@ -1,38 +1,21 @@
 package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import uet.oop.bomberman.entities.*;
-import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
 import uet.oop.bomberman.entities.MovingEntity.bomber.Bomber;
-import uet.oop.bomberman.entities.MovingEntity.enemy.Balloom;
-import uet.oop.bomberman.entities.MovingEntity.enemy.Doll;
-import uet.oop.bomberman.entities.MovingEntity.enemy.Enemy;
-import uet.oop.bomberman.entities.MovingEntity.enemy.Oneal;
-import uet.oop.bomberman.entities.StillEntity.*;
 import uet.oop.bomberman.entities.StillEntity.item.Item;
 import uet.oop.bomberman.graphics.Sprite;
 
-import javafx.scene.input.KeyEvent;
 import uet.oop.bomberman.input.KeyBoard;
-
-import java.awt.event.KeyListener;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import uet.oop.bomberman.sound.Sound;
 
 public class BombermanGame extends Application {
 
@@ -40,9 +23,12 @@ public class BombermanGame extends Application {
     private GraphicsContext gc;
     public static ImageView authorView = new ImageView();
     private Canvas canvas;
-    private Board _board = new Board(3);
     public static Stage mainStage = null;
     public static boolean running = true;
+    private Sound sounds = new Sound();
+    public static boolean upLevel = false;
+    private int level = 0;
+    private Board _board;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -62,24 +48,64 @@ public class BombermanGame extends Application {
         Scene scene = new Scene(root);
 
         // Them scene vao stage
-        stage.setTitle("Bomberman Game by Quang Anh and Tien Manh");
+        stage.setTitle("Bomberman Game by Quang Anh & Tien Manh & Minh Hieu");
         stage.setScene(scene);
         mainStage = stage;
         mainStage.show();
         keyBoard.addListener(scene);
 
-        _board.player = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        running = true;
+        sounds.play("soundtrack");
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
                 if (running) {
-                    render();
-                    update();
+                    if (upLevel) {
+                        long now = 999999999;
+                        while (now > -999999998) {
+                            now --;
+                        }
+                        now = 999999999;
+                        while (now > -999999998) {
+                            now --;
+                        }
+                        now = 999999999;
+                        while (now > -999999998) {
+                            now --;
+                        }
+                        upLevel = false;
+                        authorView.setX(-1000);
+                        authorView.setY(-2000);
+                        authorView.setScaleX(0.5);
+                        authorView.setScaleY(0.5);
+                    }
+                    if (level != 0) {
+                        render();
+                        update();
+                    }
+                }
+                if (level == 0) {
+                    upLevel = true;
+                }
+                if (upLevel) {
+                    level ++;
+                    Image img = new Image("level " + level + ".png");
+                    authorView.setImage(img);
+                    authorView.setX(-496);
+                    authorView.setY(-208);
+                    authorView.setScaleX(0.5);
+                    authorView.setScaleY(0.5);
+                    _board = new Board(level);
+                    _board.createMap();
+                    _board.player = new Bomber(1, 1, Sprite.player_right.getFxImage());
+                }
+                if (!running) {
+                    running = true;
+                    upLevel = true;
+                    level = 0;
                 }
             }
-
         };
-        _board.createMap();
         timer.start();
     }
 
@@ -92,11 +118,13 @@ public class BombermanGame extends Application {
         _board.enemys.forEach(Entity::update);
         _board.player.update();
         _board.bombs.forEach(Entity::update);
+        _board.portal.update();
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         _board.stillEntity.forEach(g -> g.render(gc));
+        _board.portal.render(gc);
         _board.items.forEach(g -> g.render(gc));
         _board.bombs.forEach(g -> g.render(gc));
         _board.enemys.forEach(g -> g.render(gc));

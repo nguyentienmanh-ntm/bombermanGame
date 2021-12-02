@@ -2,8 +2,6 @@ package uet.oop.bomberman.sound;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import java.io.File;
-import java.net.URL;
 import javax.sound.sampled.AudioInputStream;
 import sun.applet.Main;
 

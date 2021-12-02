@@ -1,7 +1,6 @@
 package uet.oop.bomberman.entities.MovingEntity;
 
 import javafx.scene.image.Image;
-import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
 
 public abstract class MovingEntity extends Entity {

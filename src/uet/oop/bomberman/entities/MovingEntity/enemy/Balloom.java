@@ -21,33 +21,6 @@ public class Balloom extends Enemy {
         super();
     }
 
-    @Override
-    protected void calculateMove() {
-        // TODO: Tính toán hướng đi và di chuyển Enemy theo _ai và cập nhật giá trị cho _direction
-        // TODO: sử dụng canMove() để kiểm tra xem có thể di chuyển tới điểm đã tính toán hay không
-        // TODO: sử dụng move() để di chuyển
-        // TODO: nhớ cập nhật lại giá trị cờ _moving khi thay đổi trạng thái di chuyển
-        int xa = 0, ya = 0;
-        if(_steps <= 0){
-            _direction = _ai.calculateDirection();
-            _steps = MAX_STEPS;
-        }
-
-        if(_direction == 0) ya--;
-        if(_direction == 2) ya++;
-        if(_direction == 3) xa--;
-        if(_direction == 1) xa++;
-
-        if(canMove(xa, ya)) {
-            _steps -= 1 + rest;
-            move(xa * _speed, ya * _speed);
-            _moving = true;
-        } else {
-            _steps = 0;
-            _moving = false;
-        }
-    }
-
     public Balloom(int x, int y) {
         super(x, y, Sprite.balloom_dead, 0.8, 100);
 

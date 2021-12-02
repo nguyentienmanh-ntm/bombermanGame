@@ -3,7 +3,6 @@ package uet.oop.bomberman.entities.StillEntity.item;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import static uet.oop.bomberman.Board.bombs;
 import static uet.oop.bomberman.Board.player;
 import uet.oop.bomberman.entities.StillEntity.StillEntity;
 import uet.oop.bomberman.sound.Sound;

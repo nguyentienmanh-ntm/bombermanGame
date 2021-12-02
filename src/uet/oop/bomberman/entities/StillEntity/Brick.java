@@ -1,13 +1,8 @@
 package uet.oop.bomberman.entities.StillEntity;
 
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.MovingEntity.enemy.ai.AILow;
-import uet.oop.bomberman.entities.StillEntity.bomb.Flame;
 import uet.oop.bomberman.entities.StillEntity.bomb.FlameSegment;
 import uet.oop.bomberman.graphics.Sprite;
 

@@ -2,7 +2,6 @@ package uet.oop.bomberman.entities.StillEntity.item;
 
 import javafx.scene.image.Image;
 
-import static uet.oop.bomberman.Board.addBombRadius;
 import static uet.oop.bomberman.Board.player;
 
 /**
