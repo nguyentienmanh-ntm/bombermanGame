@@ -7,7 +7,7 @@ import uet.oop.bomberman.entities.MovingEntity.enemy.Doll;
 import uet.oop.bomberman.entities.MovingEntity.enemy.Enemy;
 import uet.oop.bomberman.entities.MovingEntity.enemy.Oneal;
 import uet.oop.bomberman.entities.StillEntity.*;
-import uet.oop.bomberman.entities.StillEntity.bomb.Bomb;
+import uet.oop.bomberman.entities.MovingEntity.bomb.Bomb;
 import uet.oop.bomberman.entities.StillEntity.item.BombItem;
 import uet.oop.bomberman.entities.StillEntity.item.FlameItem;
 import uet.oop.bomberman.entities.StillEntity.item.Item;
@@ -238,7 +238,6 @@ public class Board {
                 br.remove();
             }
         }
-
     }
 
     public void updateEnemys() {

@@ -6,7 +6,7 @@ import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
 import uet.oop.bomberman.entities.MovingEntity.enemy.Enemy;
-import uet.oop.bomberman.entities.StillEntity.bomb.Bomb;
+import uet.oop.bomberman.entities.MovingEntity.bomb.Bomb;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.sound.Sound;
 

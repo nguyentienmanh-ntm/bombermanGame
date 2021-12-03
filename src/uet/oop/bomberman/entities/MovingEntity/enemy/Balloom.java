@@ -1,9 +1,6 @@
 package uet.oop.bomberman.entities.MovingEntity.enemy;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import uet.oop.bomberman.Board;
-import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
 import uet.oop.bomberman.entities.MovingEntity.enemy.ai.AILow;
 import uet.oop.bomberman.graphics.Sprite;
 

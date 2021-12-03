@@ -1,4 +1,4 @@
-package uet.oop.bomberman.entities.StillEntity.bomb;
+package uet.oop.bomberman.entities.MovingEntity.bomb;
 
 import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.entities.MovingEntity.MovingEntity;
@@ -100,7 +100,7 @@ public class FlameSegment extends MovingEntity {
             }
         }
         if(getX() * 32 - 16 < player.getX() && player.getX() < getX() * 32 + 30) {
-            if(getY() * 32 - 30 < player.getY() && player.getY() < getY() * 32 + 30) {
+            if(getY() * 32 - 26 < player.getY() && player.getY() < getY() * 32 + 30) {
                 player.kill();
             }
         }
